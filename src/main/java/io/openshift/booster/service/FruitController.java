@@ -30,6 +30,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Spliterator;
@@ -46,6 +51,13 @@ public class FruitController {
         this.repository = repository;
     }
 
+    @ApiOperation(value = "View a fruit with a specific ID", response = Fruit.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved fruit"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+            @ApiResponse(code = 404, message = "The resource you were trying to reach is not found")
+    })    
     @GetMapping("/{id}")
     public Fruit get(@PathVariable("id") Integer id) {
         verifyFruitExists(id);
@@ -53,6 +65,12 @@ public class FruitController {
         return repository.findOne(id);
     }
 
+    @ApiOperation(value = "View a list of available fruits", response = Iterable.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved list"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+    })    
     @GetMapping
     public List<Fruit> getAll() {
         Spliterator<Fruit> fruits = repository.findAll()
@@ -63,6 +81,12 @@ public class FruitController {
                 .collect(Collectors.toList());
     }
 
+    @ApiOperation(value = "Create a fruit", response = Fruit.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully created fruit"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+    })    
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Fruit post(@RequestBody(required = false) Fruit fruit) {
@@ -71,6 +95,12 @@ public class FruitController {
         return repository.save(fruit);
     }
 
+    @ApiOperation(value = "Update a fruit", response = Fruit.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully updated the fruit"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+    })    
     @ResponseStatus(HttpStatus.OK)
     @PutMapping("/{id}")
     public Fruit put(@PathVariable("id") Integer id, @RequestBody(required = false) Fruit fruit) {
@@ -81,6 +111,12 @@ public class FruitController {
         return repository.save(fruit);
     }
 
+    @ApiOperation(value = "Delete a fruit", response = Fruit.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted the fruit"),
+            @ApiResponse(code = 401, message = "You are not authorized to view the resource"),
+            @ApiResponse(code = 403, message = "Accessing the resource you were trying to reach is forbidden"),
+    })    
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id) {
