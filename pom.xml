@@ -244,6 +244,9 @@
           </plugin>
         </plugins>
       </build>
+      <properties>
+        <db.name>mysql</db.name>
+      </properties>
     </profile>
     <profile>
       <id>openshift-it</id>
